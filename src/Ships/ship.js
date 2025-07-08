@@ -7,6 +7,12 @@ export class Ship {
     this.hitCount++;
     return this.hitCount;
   }
+
+  // subclass must define this.length;
+
+  isSunk() {
+    return this.hitCount >= this.length;
+  }
 }
 
 export class Carrier extends Ship {
@@ -18,28 +24,28 @@ export class Carrier extends Ship {
 
 export class Battleship extends Ship {
   constructor() {
-    super()
+    super();
     this.length = 4;
   }
 }
 
 export class Cruiser extends Ship {
   constructor() {
-    super()
+    super();
     this.length = 3;
   }
 }
 
 export class Submarine extends Ship {
   constructor() {
-    super()
+    super();
     this.length = 2;
   }
 }
 
 export class Destroyer extends Ship {
   constructor() {
-    super()
+    super();
     this.length = 1;
   }
 }
