@@ -10,6 +10,7 @@ export default defineConfig([
             'webpack.common.js',
             'webpack.dev.js',
             'webpack.prod.js',
+            '**/*.test.js',
         ],
     },
     { files: ["**/*.{js,mjs,cjs}"], plugins: { js }, extends: ["js/recommended"] },
