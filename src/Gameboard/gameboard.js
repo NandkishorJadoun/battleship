@@ -1,6 +1,7 @@
 export class GameBoard {
   constructor() {
     this.board = this.#generateBoard();
+    this.missedAttacks = [];
   }
 
   #attackedCoord = new Set();
@@ -80,6 +81,8 @@ export class GameBoard {
     attackResult.ship = null;
     attackResult.result = "miss";
     attackedCoord.add(attackResult.coordinates.toString());
+
+    this.missedAttacks.push(attackResult.coordinates);
 
     return attackResult;
   }
