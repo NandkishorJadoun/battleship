@@ -84,3 +84,22 @@ describe("receiveAttack method: ", () => {
     expect(attack4.ship).toEqual(destroyer);
   });
 });
+
+describe("should keep track of missed attacks: ", () => {
+  const gameboard1 = new GameBoard();
+  const destroyer = new Destroyer();
+  gameboard1.placeShip(destroyer, 0, 0, "veritcal");
+  gameboard1.receiveAttack(0, 0);
+
+  const gameboard2 = new GameBoard();
+  gameboard2.receiveAttack(0, 0);
+  gameboard2.receiveAttack(0, 1);
+
+  test("return empty array when all attacks hit ship", () => {
+    expect(gameboard1.missedAttacks).toEqual([]);
+  });
+
+  test("return coordinates of missed attacks", () => {
+    expect(gameboard2.missedAttacks).toEqual([[0, 0], [0,1]]);
+  });
+});
