@@ -3,6 +3,8 @@ export class GameBoard {
     this.board = this.#generateBoard();
   }
 
+  #attackedCoord = new Set();
+
   #generateBoard() {
     const row = 10;
     const column = 10;
@@ -20,7 +22,6 @@ export class GameBoard {
   }
 
   placeShip(ship, xCoord, yCoord, direction, board = this.board) {
-    
     const success = false;
     const coordinates = [];
 
@@ -44,7 +45,42 @@ export class GameBoard {
         return result;
       }
     }
-
     return result;
+  }
+
+  receiveAttack(
+    xCoord,
+    yCoord,
+    board = this.board,
+    attackedCoord = this.#attackedCoord,
+  ) {
+    let result;
+    let ship;
+    const coordinates = [xCoord, yCoord];
+
+    const attackResult = { result, ship, coordinates };
+
+    if (attackedCoord.has([xCoord, yCoord].toString())) {
+      attackResult.ship = board[xCoord][yCoord];
+      attackResult.result = "already attacked";
+      return attackResult;
+    }
+
+    if (board[xCoord][yCoord] !== 0) {
+      attackResult.ship = board[xCoord][yCoord];
+      attackResult.ship.hit();
+
+      attackResult.result = attackResult.ship.isSunk() ? "sunk" : "hit";
+
+      attackedCoord.add(attackResult.coordinates.toString());
+
+      return attackResult;
+    }
+
+    attackResult.ship = null;
+    attackResult.result = "miss";
+    attackedCoord.add(attackResult.coordinates.toString());
+
+    return attackResult;
   }
 }
