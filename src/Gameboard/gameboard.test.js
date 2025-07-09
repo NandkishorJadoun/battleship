@@ -15,40 +15,72 @@ test("should initialize a 10 x 10 grid", () => {
   ).toBe(true);
 });
 
-const gameboard = new GameBoard();
-const carrier = new Carrier();
-const battleship = new Battleship();
-const cruiser = new Cruiser();
-const destroyer = new Destroyer();
+describe("placeShip method: ", () => {
+  const gameboard = new GameBoard();
+  const carrier = new Carrier();
+  const battleship = new Battleship();
+  const cruiser = new Cruiser();
+  const destroyer = new Destroyer();
 
-test("should be able to place ships", () => {
-  expect(gameboard.placeShip(carrier, 0, 0, "horizontal")).toEqual({
-    success: true,
-    coordinates: [
-      [0, 0],
-      [0, 1],
-      [0, 2],
-      [0, 3],
-      [0, 4],
-    ],
+  const placingCarrier = gameboard.placeShip(carrier, 0, 0, "horizontal");
+
+  const placingBattleship = gameboard.placeShip(battleship, 0, 4, "vertical");
+
+  const placingCruiser = gameboard.placeShip(cruiser, 1, 0, "vertical");
+
+  const placingDestroyer = gameboard.placeShip(destroyer, -1, 10, "horizontal");
+
+  test("should be able to place ships", () => {
+    expect(placingCarrier.success).toBe(true);
   });
 
-  expect(gameboard.placeShip(battleship, 0, 4, "vertical")).toEqual({
-    success: false,
-    coordinates: [],
+  test("return false if other ship is already placed", () => {
+    expect(placingBattleship.success).toBe(false);
   });
 
-  expect(gameboard.placeShip(cruiser, 1, 0, "vertical")).toEqual({
-    success: true,
-    coordinates: [
+  test("should return coordinates if ship is placed", () => {
+    expect(placingCruiser.coordinates).toEqual([
       [1, 0],
       [2, 0],
       [3, 0],
-    ],
+    ]);
   });
 
-  expect(gameboard.placeShip(destroyer, -1, 10, "horizontal")).toEqual({
-    success: false,
-    coordinates: [],
+  test("should return false when coordinates are invalid", () => {
+    expect(placingDestroyer.success).toBe(false);
+  });
+});
+
+describe("receiveAttack method: ", () => {
+  const gameboard = new GameBoard();
+  const carrier = new Carrier();
+  const destroyer = new Destroyer();
+
+  gameboard.placeShip(carrier, 0, 0, "horizontal");
+  gameboard.placeShip(destroyer, 2, 0, "veritcal");
+
+  const attack1 = gameboard.receiveAttack(0, 0);
+  const attack2 = gameboard.receiveAttack(2, 0);
+  const attack3 = gameboard.receiveAttack(2, 1);
+  const attack4 = gameboard.receiveAttack(2, 0);
+
+  test("returns the coordinates of the attack", () => {
+    expect(attack1.coordinates).toEqual([0, 0]);
+    expect(attack2.coordinates).toEqual([2, 0]);
+    expect(attack3.coordinates).toEqual([2, 1]);
+  });
+
+  test("returns the result of the attack", () => {
+    expect(attack1.result).toBe("hit");
+    expect(attack2.result).toBe("sunk");
+    expect(attack3.result).toBe("miss");
+    expect(attack4.result).toBe("already attacked");
+  });
+
+  test("return ship name when attack hits a ship", () => {
+    expect(attack1.ship).toEqual(carrier);
+    expect(attack2.ship).toEqual(destroyer);
+    expect(attack3.ship).toEqual(null);
+    expect(attack4.ship).toEqual(destroyer);
   });
 });
