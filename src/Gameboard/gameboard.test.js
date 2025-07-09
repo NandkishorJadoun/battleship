@@ -100,6 +100,29 @@ describe("should keep track of missed attacks: ", () => {
   });
 
   test("return coordinates of missed attacks", () => {
-    expect(gameboard2.missedAttacks).toEqual([[0, 0], [0,1]]);
+    expect(gameboard2.missedAttacks).toEqual([
+      [0, 0],
+      [0, 1],
+    ]);
+  });
+});
+
+describe("should report if all ships are sunk: ", () => {
+  const gameboard1 = new GameBoard();
+  const destroyer = new Destroyer();
+  gameboard1.placeShip(destroyer, 0, 0, "veritcal");
+  gameboard1.receiveAttack(0, 0);
+
+  const gameboard2 = new GameBoard();
+  const cruiser = new Cruiser();
+  gameboard2.placeShip(cruiser, 0, 0, "veritcal");
+  gameboard2.receiveAttack(0, 0);
+
+  test("return true when all ships are sunk", () => {
+    expect(gameboard1.allShipSunk()).toBe(true);
+  });
+
+  test("return false when all ships are not sunk", () => {
+    expect(gameboard2.allShipSunk()).toBe(false);
   });
 });
