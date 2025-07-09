@@ -1,6 +1,7 @@
 export class GameBoard {
   constructor() {
     this.board = this.#generateBoard();
+    this.ships = [];
     this.missedAttacks = [];
   }
 
@@ -46,6 +47,13 @@ export class GameBoard {
         return result;
       }
     }
+
+    // track all the ships on gameboard
+
+    if (result.success) {
+      this.ships.push(ship);
+    }
+
     return result;
   }
 
@@ -85,5 +93,10 @@ export class GameBoard {
     this.missedAttacks.push(attackResult.coordinates);
 
     return attackResult;
+  }
+
+  allShipSunk(ships = this.ships) {
+    const checkEachShip = (ship) => ship.isSunk();
+    return ships.every(checkEachShip);
   }
 }
