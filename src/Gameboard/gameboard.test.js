@@ -11,7 +11,7 @@ test("should initialize a 10 x 10 grid", () => {
   expect(new GameBoard().board.length).toBe(10);
   expect(new GameBoard().board.every((row) => row.length === 10)).toBe(true);
   expect(
-    new GameBoard().board.every((row) => row.every((val) => val === 0)),
+    new GameBoard().board.every((row) => row.every((val) => val.attacked === false)),
   ).toBe(true);
 });
 
@@ -78,8 +78,12 @@ describe("receiveAttack method: ", () => {
   });
 
   test("return ship name when attack hits a ship", () => {
+
+
     expect(attack1.ship).toEqual(carrier);
     expect(attack2.ship).toEqual(destroyer);
+
+    console.log(attack4)
     expect(attack3.ship).toEqual(null);
     expect(attack4.ship).toEqual(destroyer);
   });

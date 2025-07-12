@@ -16,7 +16,7 @@ export class GameBoard {
     for (let i = 0; i < row; i++) {
       board[i] = [];
       for (let j = 0; j < column; j++) {
-        board[i][j] = 0;
+        board[i][j] = { ship: null, attacked: false };
       }
     }
 
@@ -36,8 +36,8 @@ export class GameBoard {
     const shipLength = ship.length;
 
     for (let i = 0; i < shipLength; i++) {
-      if (board[xCoord][yCoord] === 0) {
-        board[xCoord][yCoord] = ship;
+      if (!board[xCoord][yCoord].ship) {
+        board[xCoord][yCoord].ship = ship;
         result.coordinates.push([xCoord, yCoord]);
         result.success = true;
         direction === "horizontal" ? yCoord++ : xCoord++;
@@ -63,6 +63,8 @@ export class GameBoard {
     board = this.board,
     attackedCoord = this.#attackedCoord,
   ) {
+    board[xCoord][yCoord].attacked = true;
+
     let result;
     let ship;
     const coordinates = [xCoord, yCoord];
@@ -70,13 +72,13 @@ export class GameBoard {
     const attackResult = { result, ship, coordinates };
 
     if (attackedCoord.has([xCoord, yCoord].toString())) {
-      attackResult.ship = board[xCoord][yCoord];
+      attackResult.ship = board[xCoord][yCoord].ship;
       attackResult.result = "already attacked";
       return attackResult;
     }
 
-    if (board[xCoord][yCoord] !== 0) {
-      attackResult.ship = board[xCoord][yCoord];
+    if (board[xCoord][yCoord].ship) {
+      attackResult.ship = board[xCoord][yCoord].ship;
       attackResult.ship.hit();
 
       attackResult.result = attackResult.ship.isSunk() ? "sunk" : "hit";
