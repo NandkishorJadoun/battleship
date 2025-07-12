@@ -4,11 +4,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Battleship</title>
 </head>
 
 <body>
+    <div class="gameboard">
+        <div class="real-board">
+            <p>Human's Board</p>
+            <div class="real"></div>
+        </div>
 
+        <div class="computer-board">
+            <p>Computer's Board</p>
+            <div class="computer"></div>
+        </div>
+    </div>
+    <p class="outcome-para">Outcome: <span class="outcome">Please click on a Cell</span></p>
+    <p class="active-player"></p>
+
+    <dialog data-modal class="result-modal">
+        <div>
+            <p class="winner"></p>
+            <button class="play-again">Play Again</button>
+        </div>
+    </dialog>
 </body>
 
 </html>
