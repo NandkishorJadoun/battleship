@@ -16,7 +16,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 30px;
+    gap: 40px;
 }
 
 .gameboard p {
@@ -163,4 +163,16 @@ dialog::backdrop {
 .name-form button:hover {
     color: white;
     background-color: #00000000;
+}
+
+@media (max-width: 480px) {
+    .gameboard{
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .computer-board,
+    .real-board{
+        gap: 0px;
+    }
 }
