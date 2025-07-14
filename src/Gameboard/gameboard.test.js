@@ -57,7 +57,7 @@ describe("receiveAttack method: ", () => {
   const destroyer = new Destroyer();
 
   gameboard.placeShip(carrier, 0, 0, "horizontal");
-  gameboard.placeShip(destroyer, 2, 0, "veritcal");
+  const placed = gameboard.placeShip(destroyer, 2, 0, "vertical");
 
   const attack1 = gameboard.receiveAttack(0, 0);
   const attack2 = gameboard.receiveAttack(2, 0);
@@ -78,12 +78,10 @@ describe("receiveAttack method: ", () => {
   });
 
   test("return ship name when attack hits a ship", () => {
-
-
     expect(attack1.ship).toEqual(carrier);
     expect(attack2.ship).toEqual(destroyer);
 
-    console.log(attack4)
+    console.log(attack4);
     expect(attack3.ship).toEqual(null);
     expect(attack4.ship).toEqual(destroyer);
   });
@@ -92,7 +90,8 @@ describe("receiveAttack method: ", () => {
 describe("should keep track of missed attacks: ", () => {
   const gameboard1 = new GameBoard();
   const destroyer = new Destroyer();
-  gameboard1.placeShip(destroyer, 0, 0, "veritcal");
+
+  gameboard1.placeShip(destroyer, 0, 0, "vertical");
   gameboard1.receiveAttack(0, 0);
 
   const gameboard2 = new GameBoard();
@@ -114,12 +113,12 @@ describe("should keep track of missed attacks: ", () => {
 describe("should report if all ships are sunk: ", () => {
   const gameboard1 = new GameBoard();
   const destroyer = new Destroyer();
-  gameboard1.placeShip(destroyer, 0, 0, "veritcal");
+  gameboard1.placeShip(destroyer, 0, 0, "vertical");
   gameboard1.receiveAttack(0, 0);
 
   const gameboard2 = new GameBoard();
   const cruiser = new Cruiser();
-  gameboard2.placeShip(cruiser, 0, 0, "veritcal");
+  gameboard2.placeShip(cruiser, 0, 0, "vertical");
   gameboard2.receiveAttack(0, 0);
 
   test("return true when all ships are sunk", () => {

@@ -24,6 +24,9 @@ export class GameBoard {
   }
 
   placeShip(ship, xCoord, yCoord, direction, board = this.board) {
+
+    let x = xCoord
+    let y = yCoord
     const success = false;
     const coordinates = [];
 
@@ -35,22 +38,39 @@ export class GameBoard {
 
     const shipLength = ship.length;
 
-    for (let i = 0; i < shipLength; i++) {
-      if (!board[xCoord][yCoord].ship) {
-        board[xCoord][yCoord].ship = ship;
-        result.coordinates.push([xCoord, yCoord]);
-        result.success = true;
-        direction === "horizontal" ? yCoord++ : xCoord++;
-      } else {
-        result.success = false;
-        result.coordinates = [];
-        return result;
+    if (direction === "horizontal") {
+      for (let i = 0; i < shipLength; i++) {
+        if (yCoord >= 0 && yCoord <= 9 && board[xCoord][yCoord].ship === null) {
+          result.success = true;
+          result.coordinates.push([xCoord, yCoord]);
+          yCoord++;
+        } else {
+          result.success = false;
+          result.coordinates = [];
+          return result;
+        }
       }
-    }
+    } else if (direction === "vertical") {
+      for (let i = 0; i < shipLength; i++) {
+        if (xCoord >= 0 && xCoord <= 9 && board[xCoord][yCoord].ship === null) {
+          result.success = true;
+          result.coordinates.push([xCoord, yCoord]);
+          xCoord++;
+        } else {
+          result.success = false;
+          result.coordinates = [];
+          return result;
+        }
+      }
+    } 
 
     // track all the ships on gameboard
 
     if (result.success) {
+      for (let i = 0; i < shipLength; i++) {
+        board[x][y].ship = ship;
+        direction === "horizontal" ? y++ : x++
+      }
       this.ships.push(ship);
     }
 
