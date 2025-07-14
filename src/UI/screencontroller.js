@@ -7,10 +7,14 @@ export function screenController(playerOne, playerTwo) {
   const playerTwoGameboard = document.querySelector(".computer");
   const winner = document.querySelector(".winner");
   const outcome = document.querySelector(".outcome");
-  const resultModal = document.querySelector('.result-modal')
+  const resultModal = document.querySelector(".result-modal");
+
+  const realPlayerBoardName = document.querySelector(".real-board-name");
 
   const playerOneGameboardArr = game.getPlayerOneBoard();
   const playerTwoGameboardArr = game.getPlayerTwoBoard();
+
+  realPlayerBoardName.textContent = playerOne.name;
 
   let playRoundResult;
 
@@ -41,10 +45,12 @@ export function screenController(playerOne, playerTwo) {
           outcome.textContent = `${game.getPassivePlayer().name} missed`;
           break;
 
-        case "sunk": outcome.textContent = `${game.getActivePlayer().name}'s ship has been sunk`;
-        break;
+        case "sunk":
+          outcome.textContent = `${game.getActivePlayer().name}'s ship has been sunk`;
+          break;
 
-        case "already attacked": outcome.textContent = `Already an Attacked Cell`;
+        case "already attacked":
+          outcome.textContent = `Already an Attacked Cell`;
       }
     }
 
@@ -58,8 +64,7 @@ export function screenController(playerOne, playerTwo) {
       playerOneGameboard.removeEventListener("click", clickHandlerBoard);
       playerTwoGameboard.removeEventListener("click", clickHandlerBoard);
 
-      resultModal.showModal()
-
+      resultModal.showModal();
     } else {
       if (game.getActivePlayer() === playerOne) {
         playerOneGameboard.removeEventListener("click", clickHandlerBoard);
