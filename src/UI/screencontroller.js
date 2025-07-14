@@ -27,11 +27,10 @@ export function screenController(playerOne, playerTwo) {
   function render() {
 
     activePlayerName.textContent = game.getActivePlayer().name
-    // Clear board UI
+
     playerOneGameboard.textContent = "";
     playerTwoGameboard.textContent = "";
 
-    // Update outcome text
     if (playRoundResult) {
       const resultText = {
         hit: "Hit!",
@@ -64,7 +63,7 @@ export function screenController(playerOne, playerTwo) {
         render();
       }, 500);
     } else {
-      // Human turn
+
       playerTwoGameboard.removeEventListener("click", clickHandlerBoard);
       playerTwoGameboard.addEventListener("click", clickHandlerBoard);
     }
