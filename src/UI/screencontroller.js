@@ -2,104 +2,92 @@ import { GameController } from "../GameController/gamecontroller.js";
 
 export function screenController(playerOne, playerTwo) {
   const game = GameController(playerOne, playerTwo);
-  const activePlayerPara = document.querySelector(".active-player");
   const playerOneGameboard = document.querySelector(".real");
   const playerTwoGameboard = document.querySelector(".computer");
-  const winner = document.querySelector(".winner");
   const outcome = document.querySelector(".outcome");
+  const winner = document.querySelector(".winner");
   const resultModal = document.querySelector(".result-modal");
 
-  const realPlayerBoardName = document.querySelector(".real-board-name");
+  const activePlayerName = document.querySelector(".active-player-name")
+  const playerOneBoardName = document.querySelector(".real-board-name")
 
-  const playerOneGameboardArr = game.getPlayerOneBoard();
-  const playerTwoGameboardArr = game.getPlayerTwoBoard();
-
-  realPlayerBoardName.textContent = playerOne.name;
+  playerOneBoardName.textContent = playerOne.name
 
   let playRoundResult;
-
+  
   function clickHandlerBoard(e) {
-    const selectedColumn = e.target.dataset.column;
-    const selectedRow = e.target.dataset.row;
+    const row = parseInt(e.target.dataset.row);
+    const col = parseInt(e.target.dataset.column);
+    if (isNaN(row) || isNaN(col)) return;
 
-    if (!selectedColumn && !selectedRow) return;
-
-    playRoundResult = game.playRound(selectedRow, selectedColumn);
-    updateScreen();
+    playRoundResult = game.playRound(row, col);
+    render();
   }
 
-  const updateScreen = () => {
+  function render() {
+
+    activePlayerName.textContent = game.getActivePlayer().name
+    // Clear board UI
     playerOneGameboard.textContent = "";
     playerTwoGameboard.textContent = "";
 
-    const activePlayer = game.getActivePlayer();
-    activePlayerPara.textContent = `${activePlayer.name}'s turn`;
-
+    // Update outcome text
     if (playRoundResult) {
-      switch (playRoundResult.result) {
-        case "hit":
-          outcome.textContent = `${game.getPassivePlayer().name} hit the ship`;
-          break;
-
-        case "miss":
-          outcome.textContent = `${game.getPassivePlayer().name} missed`;
-          break;
-
-        case "sunk":
-          outcome.textContent = `${game.getActivePlayer().name}'s ship has been sunk`;
-          break;
-
-        case "already attacked":
-          outcome.textContent = `Already an Attacked Cell`;
-      }
+      const resultText = {
+        hit: "Hit!",
+        miss: "Miss!",
+        sunk: "Sunk!",
+        "already attacked": "Already attacked!",
+      };
+      outcome.textContent = resultText[playRoundResult.result] || "";
     }
 
-    renderPlayerBoard(playerOneGameboardArr, playerOneGameboard);
-    renderPlayerBoard(playerTwoGameboardArr, playerTwoGameboard);
+    renderBoard(game.getPlayerOneBoard(), playerOneGameboard);
+    renderBoard(game.getPlayerTwoBoard(), playerTwoGameboard);
 
     if (game.getWinner()) {
-      const winnerName = game.getWinner().name;
-      winner.textContent = `${winnerName} won the game`;
-
+      winner.textContent = `${game.getWinner().name} won!`;
+      resultModal.showModal();
       playerOneGameboard.removeEventListener("click", clickHandlerBoard);
       playerTwoGameboard.removeEventListener("click", clickHandlerBoard);
-
-      resultModal.showModal();
-    } else {
-      if (game.getActivePlayer() === playerOne) {
-        playerOneGameboard.removeEventListener("click", clickHandlerBoard);
-        playerTwoGameboard.addEventListener("click", clickHandlerBoard);
-      } else if (game.getActivePlayer() === playerTwo) {
-        playerTwoGameboard.removeEventListener("click", clickHandlerBoard);
-        playerOneGameboard.addEventListener("click", clickHandlerBoard);
-      }
+      return;
     }
-  };
 
-  updateScreen();
-}
+    const currentPlayer = game.getActivePlayer();
 
-const renderPlayerBoard = (playerGameBoardArr, playerGameBoard) => {
-  playerGameBoardArr.forEach((row, rowIdx) => {
-    row.forEach((cell, columnIdx) => {
-      const cellBtn = document.createElement("button");
-      cellBtn.classList.add("cell");
+    if (currentPlayer.name === "Computer") {
+      setTimeout(() => {
+        
+        const x = Math.floor(Math.random() * 10);
+        const y = Math.floor(Math.random() * 10);
+        playRoundResult = game.playRound(x, y);
+        render();
+      }, 500);
+    } else {
+      // Human turn
+      playerTwoGameboard.removeEventListener("click", clickHandlerBoard);
+      playerTwoGameboard.addEventListener("click", clickHandlerBoard);
+    }
+  }
 
-      cellBtn.dataset.row = rowIdx;
-      cellBtn.dataset.column = columnIdx;
+  function renderBoard(boardArray, container) {
+    boardArray.forEach((row, rowIdx) => {
+      row.forEach((cell, colIdx) => {
+        const btn = document.createElement("button");
+        btn.classList.add("cell");
+        btn.dataset.row = rowIdx;
+        btn.dataset.column = colIdx;
 
-      if (cell.ship) {
-        cellBtn.classList.add("ship");
-      }
+        if (container.classList[0] !== "computer" && cell.ship) {
+          btn.classList.add("ship");
+        }
 
-      if (cell.ship && cell.attacked) {
-        cellBtn.classList.add("hit");
-      }
-
-      if (!cell.ship && cell.attacked) {
-        cellBtn.classList.add("miss");
-      }
-      playerGameBoard.appendChild(cellBtn);
+        if (cell.ship && cell.attacked) btn.classList.add("hit");
+        else if (!cell.ship && cell.attacked) btn.classList.add("miss");
+        container.appendChild(btn);
+      });
     });
-  });
-};
+  }
+
+  render();
+}
