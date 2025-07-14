@@ -8,9 +8,23 @@
 </head>
 
 <body>
+
+    <dialog class="name-dialog">
+        <form method="dialog" class="name-form">
+            <p id="game-name">Battleship</p>
+            <p>
+                <label for="name">Name: </label>
+                <input type="text" id="name" name="name" maxlength="12">
+            </p>
+            <p>
+                <button type="submit" id="submit-name">Play</button>
+            </p>
+        </form>
+    </dialog>
+
     <div class="gameboard">
         <div class="real-board">
-            <p>Human's Board</p>
+            <p> <span class="real-board-name" ></span>'s Board</p>
             <div class="real"></div>
         </div>
 
@@ -22,7 +36,7 @@
     <p class="outcome-para">Outcome: <span class="outcome">Please click on a Cell</span></p>
     <p class="active-player"></p>
 
-    <dialog data-modal class="result-modal">
+    <dialog class="result-modal">
         <div>
             <p class="winner"></p>
             <button class="play-again">Play Again</button>
