@@ -63,9 +63,3 @@ npm run dev
 * Managing DOM interactions alongside logic
 * Applying ESLint + Prettier for clean code
 * Practicing separation of concerns (UI vs Game logic)
-
-This project is open source under the [MIT License](LICENSE).
-
----
-
-Let me know if you want to add credits, gifs/screenshots, or deployment instructions!
