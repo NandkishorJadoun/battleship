@@ -8,13 +8,13 @@ export function screenController(playerOne, playerTwo) {
   const winner = document.querySelector(".winner");
   const resultModal = document.querySelector(".result-modal");
 
-  const activePlayerName = document.querySelector(".active-player-name")
-  const playerOneBoardName = document.querySelector(".real-board-name")
+  const activePlayerName = document.querySelector(".active-player-name");
+  const playerOneBoardName = document.querySelector(".real-board-name");
 
-  playerOneBoardName.textContent = playerOne.name
+  playerOneBoardName.textContent = playerOne.name;
 
   let playRoundResult;
-  
+
   function clickHandlerBoard(e) {
     const row = parseInt(e.target.dataset.row);
     const col = parseInt(e.target.dataset.column);
@@ -25,8 +25,7 @@ export function screenController(playerOne, playerTwo) {
   }
 
   function render() {
-
-    activePlayerName.textContent = game.getActivePlayer().name
+    activePlayerName.textContent = game.getActivePlayer().name;
 
     playerOneGameboard.textContent = "";
     playerTwoGameboard.textContent = "";
@@ -56,15 +55,13 @@ export function screenController(playerOne, playerTwo) {
 
     if (currentPlayer.name === "Computer") {
       setTimeout(() => {
-        
         const x = Math.floor(Math.random() * 10);
         const y = Math.floor(Math.random() * 10);
         playRoundResult = game.playRound(x, y);
         render();
       }, 500);
-    } else {
-
       playerTwoGameboard.removeEventListener("click", clickHandlerBoard);
+    } else {
       playerTwoGameboard.addEventListener("click", clickHandlerBoard);
     }
   }
